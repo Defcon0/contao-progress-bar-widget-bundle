@@ -1,0 +1,12 @@
+<div class="huh-progress-bar" data-state="{{ state }}" data-progress-url="{{ progressUrl|escape('html_attr') }}">
+    <p>
+        {{ description|raw }}
+    </p>
+
+    <div class="progress-bar">
+        <span style="width: {{ currentProgress }}%"></span>
+    </div>
+    <div class="numbers">
+        <span class="current-progress">{{ currentProgress }}</span>/<span class="total-count">{{ totalCount }}</span> {{ 'huh.progress_bar_widget.misc.items_imported'|trans }} ({{ 'huh.progress_bar_widget.misc.skipped'|trans }}: <span class="skipped-count">{{ skippedCount }}</span>)
+    </div>
+</div>

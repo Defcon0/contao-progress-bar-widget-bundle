@@ -1,0 +1,6 @@
+# misc
+huh:
+  progress_bar_widget:
+    misc:
+      items_imported: Objekte importiert
+      skipped: übersprungen

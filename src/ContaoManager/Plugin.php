@@ -41,6 +41,7 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface, RoutingPlu
      */
     public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig)
     {
+        $loader->load('@HeimrichHannotProgressBarWidgetBundle/Resources/config/services.yml');
     }
 
     public function getRouteCollection(LoaderResolverInterface $resolver, KernelInterface $kernel)

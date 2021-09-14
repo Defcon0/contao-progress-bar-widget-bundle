@@ -26,8 +26,8 @@ class LoadDataContainerListener
     public function __invoke(string $table): void
     {
         if ($this->utils->container()->isBackend()) {
-            $GLOBALS['TL_CSS']['contao-progress-bar-widget-bundle-be'] = 'bundles/heimrichhannotprogressbarwidget/assets/contao-progress-bar-widget-bundle-be.css|static';
-            $GLOBALS['TL_JAVASCRIPT']['contao-progress-bar-widget-bundle-be'] = 'bundles/heimrichhannotprogressbarwidget/assets/contao-progress-bar-widget-bundle.js|static';
+            $GLOBALS['TL_CSS']['contao-progress-bar-widget-bundle-be'] = 'bundles/heimrichhannotprogressbarwidget/contao-progress-bar-widget-bundle-be.css|static';
+            $GLOBALS['TL_JAVASCRIPT']['contao-progress-bar-widget-bundle'] = 'bundles/heimrichhannotprogressbarwidget/contao-progress-bar-widget-bundle-be.js|static';
         }
     }
 }

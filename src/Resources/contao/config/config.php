@@ -6,4 +6,4 @@
  * @license LGPL-3.0-or-later
  */
 
-$GLOBALS['BE_FFL']['huhProgress'] = 'HeimrichHannot\ProgressBarWidgetBundle\Widget\ImportProgress';
+$GLOBALS['BE_FFL']['huhProgressBar'] = 'HeimrichHannot\ProgressBarWidgetBundle\Widget\ProgressBar';

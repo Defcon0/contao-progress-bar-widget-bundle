@@ -9,36 +9,56 @@
 namespace HeimrichHannot\ProgressBarWidgetBundle\Controller;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
-use HeimrichHannot\UtilsBundle\Database\DatabaseUtil;
+use HeimrichHannot\ProgressBarWidgetBundle\Event\LoadProgressEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route(defaults={"_scope" = "frontend"})
  */
 class AjaxController
 {
-    protected ContaoFramework $framework;
-    protected DatabaseUtil    $databaseUtil;
+    const PROGRESS_URI = '/huh_progress_bar_widget/progress/%s/%s';
 
-    public function __construct(ContaoFramework $framework, DatabaseUtil $databaseUtil)
-    {
+    protected EventDispatcherInterface $eventDispatcher;
+
+    /**
+     * @var ContaoFramework
+     */
+    private $framework;
+
+    public function __construct(
+        ContaoFramework $framework,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->framework = $framework;
-        $this->databaseUtil = $databaseUtil;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
+     * Asynchronously load progress.
+     *
      * @return Response
      *
-     * @Route("/api/project")
+     * @Route("/huh_progress_bar_widget/progress/{table}/{id}")
      */
-    public function projectAction(Request $request)
+    public function progressAction(Request $request, string $table, int $id)
     {
         $this->framework->initialize();
 
-        return new JsonResponse(
-        );
+        $data = [];
+        $options = [];
+
+        if ($request->get('field')) {
+            $options['field'] = $request->get('field');
+        }
+
+        /** @var LoadProgressEvent $event */
+        $event = $this->eventDispatcher->dispatch(new LoadProgressEvent($data, $table, $id, $options), LoadProgressEvent::NAME);
+
+        return new JsonResponse($event->getData());
     }
 }
