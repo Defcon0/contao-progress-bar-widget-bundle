@@ -55,20 +55,31 @@ The progress bar widget included in an example data container array
            switch ($record->state) {
                case 'success':
                    $state = ProgressBar::STATE_SUCCESS;
+                   $class = 'tl_confirm';
                    break;
                case 'error':
                    $state = ProgressBar::STATE_FAILED;
+                   $class = 'tl_error';
                    break;
                default:
                    $state = ProgressBar::STATE_IN_PROGRESS;
+                   $class = '';
            }
 
-           $event->setData([
-               'state'           => $state,
+           $data = [
+               'state' => $state,
                'currentProgress' => $record->importProgressCurrent, // field name depends on your dca
-               'totalCount'      => $record->importProgressTotal, // field name depends on your dca
-               'skippedCount'    => $record->importProgressSkipped // field name depends on your dca
-           ]);
+               'totalCount' => $record->importProgressTotal, // field name depends on your dca
+               'skippedCount' => $record->importProgressSkipped, // field name depends on your dca
+           ];
+
+           // add messages if some are available
+           if ($record->importProgressResult) {
+               $data['messages'] = [[
+                   'class' => $class,
+                   'text' => str_replace("\n", '<br>', $record->importProgressResult),
+               ]];
+           }
        }
    }
    ```
