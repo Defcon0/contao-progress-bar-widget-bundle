@@ -13,6 +13,7 @@ use Contao\Environment;
 use Contao\System;
 use Contao\Widget;
 use HeimrichHannot\ProgressBarWidgetBundle\Controller\AjaxController;
+use HeimrichHannot\ProgressBarWidgetBundle\Event\LoadProgressEvent;
 use HeimrichHannot\UtilsBundle\Model\ModelUtil;
 use HeimrichHannot\UtilsBundle\Url\UrlUtil;
 
@@ -36,6 +37,7 @@ class ProgressBar extends Widget
         $modelUtil = System::getContainer()->get(ModelUtil::class);
         $urlUtil = System::getContainer()->get(UrlUtil::class);
         $framework = System::getContainer()->get('contao.framework');
+        $eventDispatcher = System::getContainer()->get('event_dispatcher');
 
         $framework->getAdapter(Controller::class)->loadDataContainer($this->strTable);
 
@@ -45,14 +47,17 @@ class ProgressBar extends Widget
 
         $dcaEval = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval'];
 
+        /** @var LoadProgressEvent $event */
+        $event = $eventDispatcher->dispatch(new LoadProgressEvent([], $this->strTable, $this->dataContainer->id, [
+            'field' => $this->strField,
+        ]), LoadProgressEvent::NAME);
+
         $data = array_replace($dcaEval, [
             'state' => static::STATE_IN_PROGRESS,
             'progressUrl' => $urlUtil->addQueryString('field='.$this->strField,
                 Environment::get('url').sprintf(AjaxController::PROGRESS_URI, $this->strTable, $record->id)
             ),
-            'currentProgress' => $record->{$dcaEval['currentProgressField']} ?: 0,
-            'totalCount' => $record->{$dcaEval['totalCountField']} ?: 0,
-            'skippedCount' => $record->{$dcaEval['skippedField']} ?: 0,
+            'data' => $event->getData(),
         ]);
 
         return $twig->render('@HeimrichHannotProgressBarWidget/widget/progress_bar.html.twig', $data);

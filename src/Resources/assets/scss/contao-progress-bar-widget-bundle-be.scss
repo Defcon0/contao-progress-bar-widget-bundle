@@ -2,7 +2,7 @@
   padding: 10px 0;
 
   &[data-state="success"] .progress-bar > span {
-    background-color: #198754;
+    background-color: #589b0e;
   }
 
   &[data-state="failed"] .progress-bar > span {
@@ -32,6 +32,15 @@
 
     @keyframes animate-stripes {
       0% {background-position: 0 0;} 100% {background-position: 60px 0;}
+    }
+  }
+
+  .messages {
+    .tl_error {
+      margin: 0 0 1px;
+      padding: 11px 18px 11px 37px;
+      background: #faebeb url(../img/error.svg) no-repeat 16px 12px;
+      font-size: .875rem;
     }
   }
 }
