@@ -74,3 +74,7 @@ The progress bar widget included in an example data container array
    ```
 
 ## Events
+
+Event               | Description
+--------------------|------------
+`LoadProgressEvent` | Used for passing in the current progress. See above for further explanation
