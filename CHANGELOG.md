@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] 2021-09-15
+
+- Fixed: wrong initial progress in twig template
+
 ## [0.1.2] 2021-09-14
 
 - Fixed: `README.md`

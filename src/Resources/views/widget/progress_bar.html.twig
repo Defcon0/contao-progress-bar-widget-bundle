@@ -4,7 +4,7 @@
     </p>
 
     <div class="progress-bar">
-        <span style="width: {{ data.currentProgress }}%"></span>
+        <span style="width: {{ data.totalCount == 0 ? 0 : (100 * data.currentProgress / data.totalCount) }}%"></span>
     </div>
     {% if not hideNumbers|default(false) %}
         <p class="numbers">
