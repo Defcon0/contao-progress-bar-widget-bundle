@@ -8,12 +8,10 @@
 
 namespace HeimrichHannot\ProgressBarWidgetBundle\EventListener\Contao;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 
-/**
- * @Hook("loadDataContainer")
- */
+#[AsHook('loadDataContainer')]
 class LoadDataContainerListener
 {
     protected Utils $utils;
@@ -26,8 +24,8 @@ class LoadDataContainerListener
     public function __invoke(string $table): void
     {
         if ($this->utils->container()->isBackend()) {
-            $GLOBALS['TL_CSS']['contao-progress-bar-widget-bundle-be'] = 'bundles/heimrichhannotprogressbarwidget/contao-progress-bar-widget-bundle-be.css|static';
-            $GLOBALS['TL_JAVASCRIPT']['contao-progress-bar-widget-bundle'] = 'bundles/heimrichhannotprogressbarwidget/contao-progress-bar-widget-bundle-be.js|static';
+            $GLOBALS['TL_CSS']['contao-progress-bar-widget-bundle-be'] = 'bundles/heimrichhannotprogressbarwidget/css/contao-progress-bar-widget-bundle-be.min.css|static';
+            $GLOBALS['TL_JAVASCRIPT']['contao-progress-bar-widget-bundle'] = 'bundles/heimrichhannotprogressbarwidget/js/contao-progress-bar-widget-bundle-be.min.js|static';
         }
     }
 }

@@ -1,6 +1,3 @@
-import '@hundh/contao-utils-bundle';
-import '../scss/contao-progress-bar-widget-bundle-be.scss';
-
 class ContaoProgressBarWidgetBundleBackend {
     static init() {
         ContaoProgressBarWidgetBundleBackend.initAjaxReload();
@@ -26,9 +23,16 @@ class ContaoProgressBarWidgetBundleBackend {
                 return;
             }
 
-            utilsBundle.ajax.get(widget.getAttribute('data-progress-url'), {}, {
-                onSuccess: (response) => {
-                    let data = JSON.parse(response.responseText);
+            fetch(widget.getAttribute('data-progress-url'))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    return response.text();
+                })
+                .then(data => {
+                    data = JSON.parse(data);
 
                     widget.setAttribute('data-state', data.state);
 
@@ -58,8 +62,10 @@ class ContaoProgressBarWidgetBundleBackend {
                             widget.querySelector('.messages').classList.add('invisible');
                         }
                     }
-                }
-            });
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                });
         });
     }
 }
