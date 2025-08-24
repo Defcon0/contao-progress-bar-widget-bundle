@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-/**
- * @Route(defaults={"_scope" = "frontend"})
- */
+#[Route('/huh_progress_bar_widget/progress/{table}/{id}', name: AjaxController::class, defaults: ['_scope' => 'frontend'])]
 class AjaxController
 {
     const PROGRESS_URI = '/huh_progress_bar_widget/progress/%s/%s';
@@ -42,10 +40,8 @@ class AjaxController
      * Asynchronously load progress.
      *
      * @return Response
-     *
-     * @Route("/huh_progress_bar_widget/progress/{table}/{id}")
      */
-    public function progressAction(Request $request, string $table, int $id)
+    public function __invoke(Request $request, string $table, int $id)
     {
         $this->framework->initialize();
 
@@ -58,6 +54,18 @@ class AjaxController
 
         /** @var LoadProgressEvent $event */
         $event = $this->eventDispatcher->dispatch(new LoadProgressEvent($data, $table, $id, $options), LoadProgressEvent::NAME);
+
+        $data = $event->getData();
+
+        if (empty($data)) {
+            $data = [
+                'totalCount' => 100,
+                'currentProgress' => 50,
+                'skippedCount' => 1
+            ];
+        }
+
+        return new JsonResponse($data);
 
         return new JsonResponse($event->getData());
     }
