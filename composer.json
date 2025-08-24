@@ -4,9 +4,9 @@
   "description": "This bundle offers a dynamic progress bar widget for the Contao CMS.",
   "license": "LGPL-3.0-or-later",
   "require": {
-    "php": "^7.2||^8.0",
-    "contao/core-bundle": "^4.9",
-    "heimrichhannot/contao-utils-bundle": "^2.204"
+    "php": "^7.4||^8.0",
+    "contao/core-bundle": "^4.13 || ^5.0",
+    "heimrichhannot/contao-utils-bundle": "^2.204 || ^3.7"
   },
   "require-dev": {
     "contao/test-case": "1.1.*",
@@ -23,22 +23,12 @@
   "autoload": {
     "psr-4": {
       "HeimrichHannot\\ProgressBarWidgetBundle\\": "src/"
-    },
-    "classmap": [
-      "src/"
-    ],
-    "exclude-from-classmap": [
-      "src/Resources/contao/config/",
-      "src/Resources/contao/dca/",
-      "src/Resources/contao/languages/",
-      "src/Resources/contao/templates/"
-    ]
+    }
   },
   "config": {
     "preferred-install": "dist"
   },
   "extra": {
-    "contao-manager-plugin": "HeimrichHannot\\ProgressBarWidgetBundle\\ContaoManager\\Plugin",
-    "foxy": true
+    "contao-manager-plugin": "HeimrichHannot\\ProgressBarWidgetBundle\\ContaoManager\\Plugin"
   }
 }
