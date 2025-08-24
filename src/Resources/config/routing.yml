@@ -1,3 +1,0 @@
-huh_progress_bar_widget_bundle:
-  resource: "@HeimrichHannotProgressBarWidgetBundle/Controller/"
-  type: annotation

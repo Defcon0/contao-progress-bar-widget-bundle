@@ -16,6 +16,7 @@ use HeimrichHannot\ProgressBarWidgetBundle\Controller\AjaxController;
 use HeimrichHannot\ProgressBarWidgetBundle\Event\LoadProgressEvent;
 use HeimrichHannot\UtilsBundle\Model\ModelUtil;
 use HeimrichHannot\UtilsBundle\Url\UrlUtil;
+use HeimrichHannot\UtilsBundle\Util\Utils;
 
 class ProgressBar extends Widget
 {
@@ -34,14 +35,13 @@ class ProgressBar extends Widget
     public function generate()
     {
         $twig = System::getContainer()->get('twig');
-        $modelUtil = System::getContainer()->get(ModelUtil::class);
-        $urlUtil = System::getContainer()->get(UrlUtil::class);
+        $utils = System::getContainer()->get(Utils::class);
         $framework = System::getContainer()->get('contao.framework');
         $eventDispatcher = System::getContainer()->get('event_dispatcher');
 
         $framework->getAdapter(Controller::class)->loadDataContainer($this->strTable);
 
-        if (null === ($record = $modelUtil->findModelInstanceByPk($this->strTable, $this->dataContainer->id))) {
+        if (null === ($record = $utils->model()->findModelInstanceByPk($this->strTable, $this->dataContainer->id))) {
             return 'No record found.';
         }
 
@@ -52,14 +52,24 @@ class ProgressBar extends Widget
             'field' => $this->strField,
         ]), LoadProgressEvent::NAME);
 
-        $data = array_replace($dcaEval, [
+        $data = $event->getData();
+
+        if (empty($data)) {
+            $data = [
+                'totalCount' => 100,
+                'currentProgress' => 50,
+                'skippedCount' => 1
+            ];
+        }
+
+        $parameters = array_replace($dcaEval, [
             'state' => static::STATE_IN_PROGRESS,
-            'progressUrl' => $urlUtil->addQueryString('field='.$this->strField,
+            'progressUrl' => $utils->url()->addQueryStringParameterToUrl('field='.$this->strField,
                 Environment::get('url').sprintf(AjaxController::PROGRESS_URI, $this->strTable, $record->id)
             ),
-            'data' => $event->getData(),
+            'data' => $data,
         ]);
 
-        return $twig->render('@HeimrichHannotProgressBarWidget/widget/progress_bar.html.twig', $data);
+        return $twig->render('@HeimrichHannotProgressBarWidget/widget/progress_bar.html.twig', $parameters);
     }
 }

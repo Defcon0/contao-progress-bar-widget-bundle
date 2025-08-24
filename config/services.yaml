@@ -5,4 +5,4 @@ services:
     public: true
 
   HeimrichHannot\ProgressBarWidgetBundle\:
-    resource: '../../{Controller,EventListener}/*'
+    resource: '../src/{Controller,EventListener}/*'
